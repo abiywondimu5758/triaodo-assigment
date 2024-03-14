@@ -1,3 +1,6 @@
+/* eslint-disable linebreak-style */
+/* eslint-disable max-len */
+/* eslint-disable import/no-cycle */
 import { configureStore, ThunkAction, Action } from '@reduxjs/toolkit';
 import departmentsReducer from './departmentsSlice';
 

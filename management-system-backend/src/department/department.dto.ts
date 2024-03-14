@@ -2,5 +2,5 @@ export class DepartmentDto {
   readonly id: number;
   name: string;
   description: string;
-  managingDepartmentId?: number;
+  managing_department_id?: number;
 }

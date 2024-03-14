@@ -3,33 +3,58 @@ import { PrismaClient } from '@prisma/client';
 const prisma = new PrismaClient();
 
 async function main() {
-  const departmentsData = [
-    {
-      name: 'Engineering',
-      description: 'Responsible for software development and infrastructure',
-    },
-    {
-      name: 'Marketing',
-      description: 'Responsible for promoting the company and its products',
-    },
-    {
-      name: 'Finance',
-      description: 'Responsible for financial planning and management',
-    },
-  ];
+  try {
+    // Create CEO department
+    const ceoDepartment = await prisma.department.create({
+      data: {
+        name: 'CEO',
+        description: 'Chief Executive Officer',
+        managing_department_id: -1,
+      },
+    });
 
-  await prisma.department.createMany({
-    data: departmentsData,
-  });
+    // Create CTO department under CEO
+    await prisma.department.create({
+      data: {
+        name: 'CTO',
+        description: 'Chief Technology Officer',
+        managing_department_id: ceoDepartment.id,
+      },
+    });
 
-  console.log('Seed data inserted successfully');
+    // Create CMO department under CEO
+    await prisma.department.create({
+      data: {
+        name: 'CMO',
+        description: 'Chief Marketing Officer',
+        managing_department_id: ceoDepartment.id,
+      },
+    });
+
+    // Create CFO department under CEO
+    await prisma.department.create({
+      data: {
+        name: 'CFO',
+        description: 'Chief Financial Officer',
+        managing_department_id: ceoDepartment.id,
+      },
+    });
+
+    // Create COO department under CEO
+    await prisma.department.create({
+      data: {
+        name: 'COO',
+        description: 'Chief Operating Officer',
+        managing_department_id: ceoDepartment.id,
+      },
+    });
+
+    console.log('Seed data inserted successfully');
+  } catch (error) {
+    console.error('Error seeding data:', error);
+  } finally {
+    await prisma.$disconnect();
+  }
 }
 
-main()
-  .catch((e) => {
-    console.error(e);
-    process.exit(1);
-  })
-  .finally(async () => {
-    await prisma.$disconnect();
-  });
+main();

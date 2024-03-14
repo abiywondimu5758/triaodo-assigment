@@ -8,7 +8,7 @@ export interface Department {
     id: number;
     name: string;
     description: string;
-    managingDepartmentId?: number;
+    managing_department_id?: number;
   }
 
 export type AppThunk<ReturnType = void> = ThunkAction<

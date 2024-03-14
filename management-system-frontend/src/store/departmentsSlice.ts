@@ -1,13 +1,14 @@
+/* eslint-disable linebreak-style */
+/* eslint-disable padded-blocks */
+/* eslint-disable no-trailing-spaces */
+
+/* eslint-disable @typescript-eslint/method-signature-style */
+/* eslint-disable import/no-cycle */
+/* eslint-disable import/order */
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { AppThunk } from './store';
 import axios from 'axios';
-
-interface Department {
-  id: number;
-  name: string;
-  description: string;
-  managingDepartmentId?: number;
-}
+import { Department } from '@/types';
 
 interface DepartmentsState {
   departments: Department[];
@@ -57,6 +58,7 @@ export const fetchDepartments = (): AppThunk => async (dispatch) => {
   try {
     dispatch(fetchDepartmentsStart());
     const response = await axios.get('http://localhost:4000/departments/');
+    
     dispatch(fetchDepartmentsSuccess(response.data));
   } catch (error: any) {
     dispatch(fetchDepartmentsFailure(error.message));
@@ -65,9 +67,10 @@ export const fetchDepartments = (): AppThunk => async (dispatch) => {
 
 export const updateDepartment = (updatedDepartment: Department): AppThunk => async (dispatch) => {
   try {
-    const response = await axios.put(`http://localhost:4000/departments/${updatedDepartment.id}/`, updatedDepartment);
+    console.log(updatedDepartment);
+    await axios.put(`http://localhost:4000/departments/${updatedDepartment.id}/`, updatedDepartment);
     dispatch(fetchDepartmentsSuccess);
-    console.log(`updated ${updatedDepartment.id}`);
+   
   } catch (error: any) {
     dispatch(fetchDepartmentsFailure(error.message));
   }
