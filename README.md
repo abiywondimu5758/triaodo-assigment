@@ -5,7 +5,7 @@ This guide will walk you through setting up the Management System project on you
 ## Clone the Repository
 
 ```bash
-git clone <repository-url>
+git clone https://github.com/abiywondimu5758/triaodo-assigment.git
 ```
 
 ## Setting Up Backend
