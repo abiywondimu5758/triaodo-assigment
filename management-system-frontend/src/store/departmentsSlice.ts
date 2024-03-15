@@ -67,22 +67,24 @@ export const fetchDepartments = (): AppThunk => async (dispatch) => {
 
 export const updateDepartment = (updatedDepartment: Department): AppThunk => async (dispatch) => {
   try {
-    console.log(updatedDepartment);
     await axios.put(`http://localhost:4000/departments/${updatedDepartment.id}/`, updatedDepartment);
     dispatch(fetchDepartmentsSuccess);
-   
+    return { success: true }; 
   } catch (error: any) {
     dispatch(fetchDepartmentsFailure(error.message));
+    return { success: false, error: error.message };
   }
 };
 
 export const deleteDepartment = (departmentId: number): AppThunk => async (dispatch) => {
   try {
-    await axios.delete(`http://localhost:4000/departments/${departmentId}/`);
+    const response = await axios.delete(`http://localhost:4000/departments/${departmentId}/`);
+    console.log(response);
     dispatch(fetchDepartmentsSuccess);
-    console.log(`deleted ${departmentId}`);
+    return { success: true }; 
   } catch (error: any) {
     dispatch(fetchDepartmentsFailure(error.message));
+    return { success: false, error: error.message };
   }
 };
 
@@ -90,8 +92,9 @@ export const createDepartment = (newDepartment: Omit<Department, 'id'>): AppThun
   try {
     const response = await axios.post('http://localhost:4000/departments/', newDepartment);
     dispatch(addDepartment(response.data)); 
-    console.log(`created ${response.data}`);
+    return { success: true }; 
   } catch (error: any) {
     dispatch(fetchDepartmentsFailure(error.message));
+    return { success: false, error: error.message };
   }
 };

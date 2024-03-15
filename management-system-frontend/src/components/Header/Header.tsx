@@ -20,7 +20,7 @@ export function Header() {
   // const [linksOpened, { toggle: toggleLinks }] = useDisclosure(false);
 
   return (
-    <Box pb={120} mt={30}>
+    <Box mt={30}>
       <header className={classes.header}>
         <Group justify="space-between" h="100%">
 

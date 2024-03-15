@@ -11,8 +11,13 @@
 import React, { useState } from 'react';
 // import { useDispatch } from 'react-redux';
 import { Department } from '../types';
-import { updateDepartment } from '../store/departmentsSlice';
-
+import { fetchDepartments, updateDepartment } from '../store/departmentsSlice';
+import {
+  setSuccessMessage,
+  clearSuccessMessage,
+  setErrorMessage,
+  clearErrorMessage,
+} from '../store/notificationsSlice';
 import { TextInput, Button, Paper, Select } from '@mantine/core';
 import { RootState, store } from '@/store/store';
 import { useSelector } from 'react-redux';
@@ -31,8 +36,17 @@ const EditDepartmentForm: React.FC<EditDepartmentFormProps> = ({ department, onC
   const departments = useSelector((state: RootState) => state.departments.departments);
   // const dispatch = useDispatch();
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+
+    if (!name || !description || !managing_department_id) {
+      store.dispatch(setErrorMessage('Please fill in all fields'));
+      setTimeout(() => {
+        store.dispatch(clearErrorMessage());
+      }, 3000);
+      return;
+    }
+
     let parsedId: number | undefined;
 
     if (managing_department_id !== undefined) {
@@ -40,13 +54,24 @@ const EditDepartmentForm: React.FC<EditDepartmentFormProps> = ({ department, onC
     }
     const updatedDepartment = { ...department, name, description, managing_department_id: parsedId };
    
-    store.dispatch(updateDepartment(updatedDepartment));
+    const response = await store.dispatch(updateDepartment(updatedDepartment));
+    if (response.success) {
+      store.dispatch(setSuccessMessage('Department edited successfully'));
+      setTimeout(() => {
+        store.dispatch(clearSuccessMessage());
+      }, 3000);
+    } else {
+      store.dispatch(fetchDepartments());
+      store.dispatch(setErrorMessage('Error editing department'));
+      setTimeout(() => {
+        store.dispatch(clearErrorMessage());
+      }, 3000);
+    }
     onClose();
   };
 
   return (
-    <Paper shadow="sm" style={{ maxWidth: 400, margin: '0 auto' }}>
-      <h2 style={{ marginBottom: 15 }}>Edit Department</h2>
+    <Paper style={{ width: 300, margin: '0 auto' }}>
       <form onSubmit={handleSubmit}>
         <TextInput
           placeholder="Name"
@@ -64,7 +89,7 @@ const EditDepartmentForm: React.FC<EditDepartmentFormProps> = ({ department, onC
           <Select disabled={true} />
         ) : (
           <Select
-            data={departments.map((departmentSelected) => ({
+            data={departments.filter(dep => dep.id !== department.id).map((departmentSelected) => ({
               value: departmentSelected.id.toString(),
               label: departmentSelected.name,
             }))}
@@ -74,10 +99,14 @@ const EditDepartmentForm: React.FC<EditDepartmentFormProps> = ({ department, onC
             style={{ marginBottom: 15 }}
           />
         )}
-
-        <Button variant="outline" type="submit" fullWidth>
+        <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+        <Button type="button" variant="outline" onClick={onClose}>
+          Cancel
+        </Button>
+        <Button variant="outline" type="submit" >
           Save
         </Button>
+        </div>
       </form>
     </Paper>
   );
