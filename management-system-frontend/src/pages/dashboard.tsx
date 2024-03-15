@@ -142,14 +142,14 @@ const Dashboard: React.FC = () => {
   return (
     <div className="flex flex-col p-10 pr-20 h-full mt-0 min-w-full justify-around space-y-6 space-x-6 items-center md:flex-row md:items-start md:space-x-6 md:space-y-0">
       <div className="flex">
-        <div className="flex flex-col items-center border-2 p-4 w-[350px] sm:w-[500px] h-96">
+        <div className="flex flex-col items-center border-2 rounded-md p-4 w-[350px] sm:w-[500px] h-96">
           <div className="flex items-center justify-between w-full mb-3">
             <span className="text-lg text-blue-400 mb-4">List of departments</span>
             <Button variant="outline" onClick={handleAddButtonClick} className="text-xs py-1 px-2">
               Add Department
             </Button>
           </div>
-          <div className="flex flex-col items-center border-2 p-4 w-full h-full overflow-auto">
+          <div className="flex flex-col items-center border-2 rounded-md p-4 w-full h-full overflow-auto">
             {departments.map((department) => (
               <div
                 key={department.id}
@@ -244,7 +244,7 @@ const Dashboard: React.FC = () => {
           </div>
         )}
         {treeData && (
-          <div className="h-96 w-[400px] border-2">
+          <div className="h-96 w-[400px] border-2 bg-gray-100">
             <Tree
               data={treeData}
               orientation="vertical"
