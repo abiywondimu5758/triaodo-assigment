@@ -5,8 +5,8 @@ generator client {
 
 datasource db {
   provider  = "postgresql"
-  url       = "postgres://postgres:root@localhost:5432/triaodo"
-  directUrl = "postgres://postgres:root@localhost:5432/triaodo"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
 }
 
 model Department {
